@@ -776,38 +776,42 @@ void spiral(int a, int b, int c, int d, int k) {
 
 	float t;
 	float step = 1.0f / (float)AM;
-	for (t = 0.0f; t < 1.0f && i < AM; t += step, i++)
-	{
-		//po³o¿enie punktu wzglêdem osi x
-		vertices[i][0] = cos(2 * M_PI * k * t) * sqrt(d * t) * b * t;
-		//po³o¿enie punktu wzglêdem osi y
-		vertices[i][1] = sin(2 * M_PI * k * t) * sqrt(d * t) * b * t;
-		//po³o¿enie punktu wzglêdem osi z
-		vertices[i][2] = (float)(t * c) - 60.0f;
-	}
-
-	//vertices[0][0] = 0;
-	//vertices[0][1] = 0;
-	//vertices[0][2] = 0;
-	//for (i=1;i < AM;i++)
+	//for (t = 0.0f; t < 1.0f && i < AM; t += step, i++)
 	//{
 	//	//po³o¿enie punktu wzglêdem osi x
-	//	if(i%4==0){
-	//		vertices[i][0] = vertices[i - 1][0] += 100;
-	//	}
-	//	else{
-	//		vertices[i][0] = vertices[i - 1][0];
-	//	}
+	//	vertices[i][0] = cos(2 * M_PI * k * t) * sqrt(d * t) * b * t;
 	//	//po³o¿enie punktu wzglêdem osi y
-	//	if(i%2==0){
-	//		vertices[i][1] = vertices[i - 1][1] += 100;
-	//	}
-	//	else {
-	//		vertices[i][1] = vertices[i - 1][1];
-	//	}
+	//	vertices[i][1] = sin(2 * M_PI * k * t) * sqrt(d * t) * b * t;
 	//	//po³o¿enie punktu wzglêdem osi z
-	//	vertices[i][2] = vertices[i - 1][2] += 40;
+	//	vertices[i][2] = (float)(t * c) - 60.0f;
 	//}
+
+	vertices[0][0] = 1;
+	vertices[0][1] = 1;
+	vertices[0][2] = 1;
+	for (i=1;i < AM;i++)
+	{
+		//po³o¿enie punktu wzglêdem osi x
+		vertices[i][0] = vertices[i-1][2];
+
+		//po³o¿enie punktu wzglêdem osi z
+		if(i%4==1){
+			vertices[i][2] = -1 * vertices[i - 1][2] + 100;
+		}
+		else{
+			vertices[i][2] = vertices[i - 1][2];
+		}
+		//po³o¿enie punktu wzglêdem osi z
+		if(i%4==3){
+			vertices[i][2] = -1 * vertices[i - 1][2];
+		}
+		else {
+			vertices[i][2] = vertices[i - 1][2];
+		}
+
+		//po³o¿enie punktu wzglêdem osi y
+		vertices[i][1] = vertices[i - 1][1] += 100;
+	}
 
 	glLineWidth(3.0f);
 
