@@ -765,16 +765,13 @@ void mur() {
 
 }
 
-void spiral(int a, int b, int c, int d, int k) {
-#define IL_PKT 40//iloœæ punktów
-#define M_PI 3.141592
+void pyramid() {
+#define IL_PKT 20 //ilosc punktow
 
 	float clr = 0.0f;
-
+	float step = 1.0f / (float)IL_PKT;
 	int i = 0;
 	GLfloat vertices[IL_PKT][3];
-
-	float step = 1.0f / (float)IL_PKT;
 
 	vertices[0][0] = 0; //x
 	vertices[0][1] = 0; //y
@@ -830,7 +827,7 @@ void RenderScene(void)
 	// MIEJSCE NA KOD OPENGL DO TWORZENIA WLASNYCH SCEN:		   //
 	/////////////////////////////////////////////////////////////////
 
-	spiral(0,5,100,30,2);
+	pyramid();
 
 	//Sposób na odróŸnienie "przedniej" i "tylniej" œciany wielok¹ta:
 	glPolygonMode(GL_BACK, GL_LINE);
