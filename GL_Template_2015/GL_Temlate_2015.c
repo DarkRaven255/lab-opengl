@@ -766,60 +766,48 @@ void mur() {
 }
 
 void spiral(int a, int b, int c, int d, int k) {
-#define AM 170//iloœæ punktów
+#define IL_PKT 40//iloœæ punktów
 #define M_PI 3.141592
 
 	float clr = 0.0f;
 
 	int i = 0;
-	GLfloat vertices[AM][3];
+	GLfloat vertices[IL_PKT][3];
 
-	float t;
-	float step = 1.0f / (float)AM;
-	//for (t = 0.0f; t < 1.0f && i < AM; t += step, i++)
-	//{
-	//	//po³o¿enie punktu wzglêdem osi x
-	//	vertices[i][0] = cos(2 * M_PI * k * t) * sqrt(d * t) * b * t;
-	//	//po³o¿enie punktu wzglêdem osi y
-	//	vertices[i][1] = sin(2 * M_PI * k * t) * sqrt(d * t) * b * t;
-	//	//po³o¿enie punktu wzglêdem osi z
-	//	vertices[i][2] = (float)(t * c) - 60.0f;
-	//}
+	float step = 1.0f / (float)IL_PKT;
 
-	vertices[0][0] = 1;
-	vertices[0][1] = 1;
-	vertices[0][2] = 1;
-	for (i=1;i < AM;i++)
+	vertices[0][0] = 0; //x
+	vertices[0][1] = 0; //y
+	vertices[0][2] = 0; //z
+	for (i=0;i < IL_PKT -1;i++)
 	{
-		//po³o¿enie punktu wzglêdem osi x
-		vertices[i][0] = vertices[i-1][2];
+		//polozenie punktu wzgledem osi x
+		vertices[i+1][0] = vertices[i][2];
 
-		//po³o¿enie punktu wzglêdem osi z
-		if(i%4==1){
-			vertices[i][2] = -1 * vertices[i - 1][2] + 100;
+		//polozenie wzgledem osi z
+		if(i%4==1)
+		{
+			vertices[i + 1][2] = -1 * vertices[i][2] + 5;
 		}
-		else{
-			vertices[i][2] = vertices[i - 1][2];
+		else if(i%4==3)
+		{
+			vertices[i + 1][2] = -1 * vertices[i][2];
 		}
-		//po³o¿enie punktu wzglêdem osi z
-		if(i%4==3){
-			vertices[i][2] = -1 * vertices[i - 1][2];
-		}
-		else {
-			vertices[i][2] = vertices[i - 1][2];
+		else
+		{
+			vertices[i + 1][2] = vertices[i][2];
 		}
 
-		//po³o¿enie punktu wzglêdem osi y
-		vertices[i][1] = vertices[i - 1][1] += 100;
+		//polozenie punktu wzgledem osi y
+		vertices[i+1][1] = vertices[i][1] + 2;
 	}
 
-	glLineWidth(3.0f);
+	glLineWidth(2.0f);
 
 	glBegin(GL_LINE_STRIP);
-	for (i = 0; i < AM; i++) {
+	for (i = 0; i < IL_PKT; i++) {
 		glVertex3fv(vertices[i]);
-		glColor3f(clr, clr / 2.0f, clr / 2.0f);
-		glColor3f(clr, clr / 2.0f, clr / 2.0f);
+		glColor3f(clr / 0.5, clr / 0.9f, clr);
 		clr += step;
 	}
 	glEnd();
