@@ -44,6 +44,9 @@ static HINSTANCE hInstance;
 static GLfloat xRot = 0.0f;
 static GLfloat yRot = 0.0f;
 
+static GLfloat height = 2;
+static GLfloat width = 2;
+
 
 static GLsizei lastHeight;
 static GLsizei lastWidth;
@@ -773,6 +776,7 @@ void pyramid() {
 	int i = 0;
 	GLfloat vertices[IL_PKT][3];
 
+
 	vertices[0][0] = 0; //x
 	vertices[0][1] = 0; //y
 	vertices[0][2] = 0; //z
@@ -784,7 +788,7 @@ void pyramid() {
 		//polozenie wzgledem osi z
 		if(i%4==1)
 		{
-			vertices[i + 1][2] = -1 * vertices[i][2] + 5;
+			vertices[i + 1][2] = -1 * vertices[i][2] + width;
 		}
 		else if(i%4==3)
 		{
@@ -796,7 +800,7 @@ void pyramid() {
 		}
 
 		//polozenie punktu wzgledem osi y
-		vertices[i+1][1] = vertices[i][1] + 2;
+		vertices[i+1][1] = vertices[i][1] + height;
 	}
 
 	glLineWidth(2.0f);
@@ -804,7 +808,7 @@ void pyramid() {
 	glBegin(GL_LINE_STRIP);
 	for (i = 0; i < IL_PKT; i++) {
 		glVertex3fv(vertices[i]);
-		glColor3f(clr / 0.5, clr / 0.9f, clr);
+		glColor3f(clr, clr / 0.9f, clr / 0.5);
 		clr += step;
 	}
 	glEnd();
@@ -813,7 +817,7 @@ void pyramid() {
 // Called to draw scene
 void RenderScene(void)
 {
-	//float normal[3];	// Storeage for calculated surface normal
+	//float normal[3];	// Storage for calculated surface normal
 
 	// Clear the window with current clearing color
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -1187,6 +1191,12 @@ LRESULT CALLBACK WndProc(HWND    hWnd,
 
 		if (wParam == VK_RIGHT)
 			yRot += 5.0f;
+
+		if (wParam == (int)'W') width += 0.16f;
+		if (wParam == (int)'S') width -= 0.16f;
+
+		if (wParam == (int)'Q') height += 0.16f;
+		if (wParam == (int)'A') height -= 0.16f;
 
 		xRot = (const int)xRot % 360;
 		yRot = (const int)yRot % 360;
