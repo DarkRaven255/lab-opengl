@@ -40,6 +40,14 @@
 #define KB_W 87
 #define KB_S 83
 
+static GLfloat xRot = 0.0f;
+static GLfloat yRot = 0.0f;
+static GLfloat yStep;
+static GLfloat density = 20.0f;
+static GLfloat height = 20.0f;
+static GLfloat width = 20.0f;
+static GLfloat xStep;
+
 // Color Palette handle
 HPALETTE hPalette = NULL;
 
@@ -68,7 +76,50 @@ BOOL APIENTRY AboutDlgProc(HWND hDlg, UINT message, UINT wParam, LONG lParam);
 // Set Pixel Format function - forward declaration
 void SetDCPixelFormat(HDC hDC);
 
+void pyramid() {
+	yStep = height / density;
+	xStep = width / (density / 4);
+	float clr = 0.0f;
+	float step = 1.0f / (float)height;
+	int i = 0;
+	GLfloat vertices[1000][3];
 
+	vertices[0][0] = 0; //x
+	vertices[0][1] = 0; //y
+	vertices[0][2] = 0; //z
+	for (i = 0; i < density - 1; i++)
+	{
+		//polozenie punktu wzgledem osi x
+		vertices[i + 1][0] = vertices[i][2];
+
+		//polozenie wzgledem osi z
+		if (i % 4 == 1)
+		{
+			vertices[i + 1][2] = -1 * vertices[i][2] + xStep;
+		}
+		else if (i % 4 == 3)
+		{
+			vertices[i + 1][2] = -1 * vertices[i][2];
+		}
+		else
+		{
+			vertices[i + 1][2] = vertices[i][2];
+		}
+
+		//polozenie punktu wzgledem osi y
+		vertices[i + 1][1] = vertices[i][1] + yStep;
+	}
+
+	glLineWidth(2.0f);
+
+	glBegin(GL_LINE_STRIP);
+	for (i = 0; i < density; i++) {
+		glVertex3fv(vertices[i]);
+		glColor3f(clr, clr / static_cast<GLfloat>(0.9f), clr / static_cast<GLfloat>(0.5f));
+		clr += step;
+	}
+	glEnd();
+}
 
 // Reduces a normal vector specified as a set of three coordinates,
 // to a unit normal vector of length one.
@@ -272,73 +323,6 @@ unsigned char *LoadBitmapFile(char *filename, BITMAPINFOHEADER *bitmapInfoHeader
 	return bitmapImage;
 }
 
-//void table_resize()
-//{
-//	if (vertices != nullptr)
-//	{
-//		for (int i = 0; i < density; ++i) {
-//			delete[] vertices[i];
-//		}
-//		delete[] vertices;
-//	}
-//
-//	for (int i = 0; i < density; i++)
-//		vertices[i] = new GLfloat[3];
-//}
-
-// Rotation amounts
-static GLfloat xRot = 0.0f;
-static GLfloat yRot = 0.0f;
-static GLfloat yStep;
-static GLfloat density = 20.0f;
-static GLfloat height = 20.0f;
-static GLfloat width = 20.0f;
-static GLfloat xStep;
-
-void pyramid() {
-	yStep = height / density;
-	xStep = width / (density / 4);
-	float clr = 0.0f;
-	float step = 1.0f / (float)height;
-	int i = 0;
-	GLfloat vertices[1000][3];
-
-	vertices[0][0] = 0; //x
-	vertices[0][1] = 0; //y
-	vertices[0][2] = 0; //z
-	for (i = 0; i < density - 1; i++)
-	{
-		//polozenie punktu wzgledem osi x
-		vertices[i + 1][0] = vertices[i][2];
-
-		//polozenie wzgledem osi z
-		if (i % 4 == 1)
-		{
-			vertices[i + 1][2] = -1 * vertices[i][2] + xStep;
-		}
-		else if (i % 4 == 3)
-		{
-			vertices[i + 1][2] = -1 * vertices[i][2];
-		}
-		else
-		{
-			vertices[i + 1][2] = vertices[i][2];
-		}
-
-		//polozenie punktu wzgledem osi y
-		vertices[i + 1][1] = vertices[i][1] + yStep;
-	}
-
-	glLineWidth(2.0f);
-
-	glBegin(GL_LINE_STRIP);
-	for (i = 0; i < density; i++) {
-		glVertex3fv(vertices[i]);
-		glColor3f(clr, clr / 0.9f, clr / 0.5);
-		clr += step;
-	}
-	glEnd();
-}
 
 // Called to draw scene
 void RenderScene(void)
@@ -553,6 +537,7 @@ int APIENTRY WinMain(HINSTANCE       hInst,
 }
 
 
+
 // Window procedure, handles all messages for this program
 LRESULT CALLBACK WndProc(HWND    hWnd,
 	UINT    message,
@@ -734,8 +719,8 @@ LRESULT CALLBACK WndProc(HWND    hWnd,
 		if (wParam == KB_S)
 			width += 0.2f;
 
-		xRot = (const int)xRot % 360;
-		yRot = (const int)yRot % 360;
+		xRot = static_cast<GLfloat>(static_cast<int>(xRot) % 360);
+		yRot = static_cast<GLfloat>(static_cast<int>(yRot) % 360);
 
 		InvalidateRect(hWnd, NULL, FALSE);
 	}
