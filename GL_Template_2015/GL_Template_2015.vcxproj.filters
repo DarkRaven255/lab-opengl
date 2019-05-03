@@ -28,5 +28,8 @@
     <ClCompile Include="GL_Temlate_2015.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Template.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
