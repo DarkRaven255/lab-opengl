@@ -40,10 +40,6 @@ HPALETTE hPalette = NULL;
 static LPCTSTR lpszAppName = "GL Template";
 static HINSTANCE hInstance;
 
-// Rotation amounts
-static GLfloat xRot = 0.0f;
-static GLfloat yRot = 0.0f;
-
 static GLsizei lastHeight;
 static GLsizei lastWidth;
 
@@ -764,12 +760,6 @@ void mur() {
 
 }
 
-
-static GLfloat height = 2;
-static GLfloat width = 2;
-static GLint density = 20;
-GLfloat** vertices = new GLfloat*[density];
-
 //void table_resize()
 //{
 //	if (vertices != nullptr)
@@ -784,15 +774,22 @@ GLfloat** vertices = new GLfloat*[density];
 //		vertices[i] = new GLfloat[3];
 //}
 
-void pyramid() {
-//#define IL_PKT 20 //ilosc punktow
+// Rotation amounts
+static GLfloat xRot = 0.0f;
+static GLfloat yRot = 0.0f;
+static GLfloat yStep;
+static GLfloat density = 20.0f;
+static GLfloat height = 20.0f;
+static GLfloat width = 20.0f;
+static GLfloat xStep;
 
+void pyramid() {
+	yStep = height / density;
+	xStep = width / (density / 4);
 	float clr = 0.0f;
-	float step = 1.0f / density;
+	float step = 1.0f / (float)height;
 	int i = 0;
-	//GLfloat vertices[IL_PKT][3];
-	for (int i = 0; i < density; i++)
-		vertices[i] = new GLfloat[3];
+	GLfloat vertices[1000][3];
 
 	vertices[0][0] = 0; //x
 	vertices[0][1] = 0; //y
@@ -805,7 +802,7 @@ void pyramid() {
 		//polozenie wzgledem osi z
 		if (i % 4 == 1)
 		{
-			vertices[i + 1][2] = -1 * vertices[i][2] + width;
+			vertices[i + 1][2] = -1 * vertices[i][2] + xStep;
 		}
 		else if (i % 4 == 3)
 		{
@@ -817,7 +814,7 @@ void pyramid() {
 		}
 
 		//polozenie punktu wzgledem osi y
-		vertices[i + 1][1] = vertices[i][1] + height;
+		vertices[i + 1][1] = vertices[i][1] + yStep;
 	}
 
 	glLineWidth(2.0f);
@@ -1043,7 +1040,12 @@ int APIENTRY WinMain(HINSTANCE       hInst,
 	return msg.wParam;
 }
 
-
+#define KB_A 65
+#define KB_Q 81
+#define KB_E 69
+#define KB_D 68
+#define KB_W 87
+#define KB_S 83
 
 
 // Window procedure, handles all messages for this program
@@ -1209,14 +1211,23 @@ LRESULT CALLBACK WndProc(HWND    hWnd,
 		if (wParam == VK_RIGHT)
 			yRot += 5.0f;
 
-		if (wParam == (int)'W') width += 0.16f;
-		if (wParam == (int)'S') width -= 0.16f;
+		if (wParam == KB_A)
+			height -= 0.2f;
 
-		if (wParam == (int)'Q') height += 0.16f;
-		if (wParam == (int)'A') height -= 0.16f;
+		if (wParam == KB_Q)
+			height += 0.2f;
 
-		if (wParam == (int)'E') density += 1;
-		if (wParam == (int)'D') density -= 1;
+		if (wParam == KB_D)
+			density -= 0.2f;
+
+		if (wParam == KB_E)
+			density += 0.2f;
+
+		if (wParam == KB_W)
+			width -= 0.2f;
+
+		if (wParam == KB_S)
+			width += 0.2f;
 
 		xRot = (const int)xRot % 360;
 		yRot = (const int)yRot % 360;
