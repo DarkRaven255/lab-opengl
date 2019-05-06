@@ -1,4 +1,3 @@
-// Pyramid.cpp
 //Wy³šczanie b³êdów przed "fopen"
 #define  _CRT_SECURE_NO_WARNINGS
 
@@ -33,6 +32,7 @@
 #define BITMAP_ID 0x4D42		// identyfikator formatu BMP
 #define GL_PI 3.14
 
+//Przyciski klawiatury
 #define KB_A 65
 #define KB_Q 81
 #define KB_E 69
@@ -40,6 +40,7 @@
 #define KB_W 87
 #define KB_S 83
 
+//Zmienne globalne
 static GLfloat xRot = 0.0f;
 static GLfloat yRot = 0.0f;
 static GLfloat yStep;
