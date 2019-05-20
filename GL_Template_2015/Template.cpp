@@ -110,8 +110,57 @@ void pyramid() {
 		//polozenie punktu wzgledem osi y
 		vertices[i + 1][1] = vertices[i][1] + yStep;
 	}
+	//zrobiæ wêze³ nitk¹
 
-	glLineWidth(2.0f);
+	glLineWidth(10.0f);
+
+	glBegin(GL_LINE_STRIP);
+	for (i = 0; i < density; i++) {
+		glVertex3fv(vertices[i]);
+		glColor3f(clr, clr / static_cast<GLfloat>(0.9f), clr / static_cast<GLfloat>(0.5f));
+		clr += step;
+	}
+	glEnd();
+}
+
+void knot(void)
+{
+	yStep = height / density;
+	xStep = width / (density / 4);
+	float clr = 0.0f;
+	float step = 1.0f / (float)height;
+	int i = 0;
+	GLfloat vertices[6][3];
+
+	vertices[0][0] = 0; //x
+	vertices[0][1] = 0; //y
+	vertices[0][2] = 10; //z
+
+	vertices[1][0] = 60; //x
+	vertices[1][1] = 5; //y
+	vertices[1][2] = -10; //z
+
+	vertices[2][0] = 70; //x
+	vertices[2][1] = -10; //y
+	vertices[2][2] = 10; //z
+
+	vertices[3][0] = 20; //x
+	vertices[3][1] = -20; //y
+	vertices[3][2] = -10; //z
+
+	vertices[4][0] = 20; //x
+	vertices[4][1] = 5; //y
+	vertices[4][2] = 0; //z
+
+	vertices[5][0] = 90; //x
+	vertices[5][1] = -10; //y
+	vertices[5][2] = -5; //z
+
+	glLineWidth(10.0f);
+	// Formaty do importu:
+	//OBJ 
+	//Collada
+	//
 
 	glBegin(GL_LINE_STRIP);
 	for (i = 0; i < density; i++) {
@@ -342,7 +391,8 @@ void RenderScene(void)
 	// MIEJSCE NA KOD OPENGL DO TWORZENIA WLASNYCH SCEN:		   //
 	/////////////////////////////////////////////////////////////////
 
-	pyramid();
+	//pyramid();
+	knot();
 
 	//Sposób na odróŸnienie "przedniej" i "tylniej" œciany wielok¹ta:
 	glPolygonMode(GL_BACK, GL_LINE);
@@ -703,22 +753,22 @@ LRESULT CALLBACK WndProc(HWND    hWnd,
 			yRot += 5.0f;
 
 		if (wParam == KB_A)
-			height -= 0.2f;
+			height -= 0.5f;
 
 		if (wParam == KB_Q)
-			height += 0.2f;
+			height += 0.5f;
 
 		if (wParam == KB_D)
-			density -= 0.2f;
+			density -= 0.5f;
 
 		if (wParam == KB_E)
-			density += 0.2f;
+			density += 0.5f;
 
 		if (wParam == KB_W)
-			width -= 0.2f;
+			width -= 0.5f;
 
 		if (wParam == KB_S)
-			width += 0.2f;
+			width += 0.5f;
 
 		xRot = static_cast<GLfloat>(static_cast<int>(xRot) % 360);
 		yRot = static_cast<GLfloat>(static_cast<int>(yRot) % 360);
